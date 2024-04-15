@@ -1,17 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoAnon</title>
+  <!-- Include MetaMask script -->
+  <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+  <!-- Include Bootstrap for styling (optional) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      min-height: 100vh;
+      background-color: black;
+      color: white;
+    }
+    
+    .container {
+      padding: 50px;
+    }
+    
+    .flicker {
+      animation: flickerAnimation 1s infinite;
+    }
+    
+    @keyframes flickerAnimation {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="flicker">gm, anon!🚀</h1>
+    <button id="loginButton" class="btn btn-primary">Connect your EVM wallet! 🔗</button>
+    <p id="status"></p>
+    <div class="form-group">
+      <label for="address">Connected Address:</label>
+      <input type="text" class="form-control" id="address" readonly>
+    </div>
+    <button id="verifyButton" class="btn btn-success">Verify yourself 🔍</button>
+  </div>
 
-    <title>ERC721 Drop</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <script>
+    // Check if MetaMask is installed
+    if (window.ethereum) {
+      const ethereumButton = document.getElementById('loginButton');
+
+      // Handle login button click
+      ethereumButton.addEventListener('click', () => {
+        // Request access to MetaMask accounts
+        ethereum.request({ method: 'eth_requestAccounts' })
+        .then(accounts => {
+          const account = accounts[0];
+          document.getElementById('status').innerText = `Connected with account: ${account}`;
+          document.getElementById('address').value = account;
+          // You can perform further actions with the logged-in account here
+        })
+        .catch(error => {
+          console.error(error);
+          document.getElementById('status').innerText = 'Error connecting to MetaMask';
+        });
+      });
+
+      // Handle verify button click
+      const verifyButton = document.getElementById('verifyButton');
+      verifyButton.addEventListener('click', () => {
+        window.location.href = 'verify.html'; // Redirect to the verification page
+      });
+    } else {
+      document.getElementById('status').innerText = 'Please install MetaMask to use this feature';
+    }
+    const verifyButton = document.getElementById('verifyButton');
+    verifyButton.addEventListener('click', () => {
+      const address = document.getElementById('address').value;
+      window.location.href = `verify.html?address=${address}`; // Redirect to the verification page with the address as a query parameter
+    });
+  </script>
+</body>
 </html>

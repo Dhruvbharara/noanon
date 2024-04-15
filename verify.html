@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Verification</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: black;
+      color: white; /* Set text color to white for better contrast */
+      padding: 50px;
+      display: flex; /* Use flexbox for bottom left alignment */
+      justify-content: flex-start; /* Align content to the left */
+      align-items: flex-end; /* Align content to the bottom */
+    }
+    h1, h2 {
+      margin-bottom: 15px; /* Add some space between headings */
+    }
+    .form-group {
+      margin-bottom: 10px; /* Add some space between form groups */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">  <h1>howdy, anon!  Find the list of supported documents below and upload for further verification. </h1>
+    <h3>Accepted Documents: Driving License , Aadhar Card ...</h3>
+  
+
+    <div class="form-group">
+      <label for="currentAddress">Chosen Current Address:</label>
+      <input type="text" class="form-control" id="currentAddress" readonly>
+      <p1></p1>
+      <p1></p1>
+      <p1></p1>
+      <p1></p1>
+
+    </div>
+    <div class="form-group" style="margin-top: 400px;">
+      <label for="fileInput">Choose File:</label>
+      <input type="file" class="form-control-file" id="fileInput" accept=".pdf,.jpeg,.jpg,.png">
+    </div>
+    <button id="mintButton" class="btn btn-primary">Verify </button>
+    <p id="countdown" style="display: none;"></p>
+  </div>
+
+  <script>
+    // Extract address from query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const address = urlParams.get('address');
+    // Display address in the input field
+    document.getElementById('currentAddress').value = address;
+
+    // Handle mint button click
+    const mintButton = document.getElementById('mintButton');
+    mintButton.addEventListener('click', () => {
+      // Disable the button
+      mintButton.disabled = true;
+
+      // Get the chosen file (if any)
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      // Redirect to the NFT minted page with address and chosen file
+      if (file) {
+        // Show the countdown
+        const countdownElement = document.getElementById('countdown');
+        countdownElement.style.display = 'block';
+
+        let secondsLeft = 10;
+        countdownElement.textContent = `Verification will proceed in ${secondsLeft} seconds`;
+
+        const countdownInterval = setInterval(() => {
+          secondsLeft--;
+          countdownElement.textContent = `Hold on, anon! as we are validating the documents in ${secondsLeft}`;
+          if (secondsLeft === 0) {
+            clearInterval(countdownInterval);
+            countdownElement.textContent = 'Congratulations! ID Verified ';
+            const redirectUrl = `nft_minted.html?address=${address}&filename=${encodeURIComponent(file.name)}`;
+            window.location.href = redirectUrl;
+          }
+        }, 1000);
+      } else {
+        alert('Please upload a valid document for verification.');
+        // Enable the button again if no file is chosen
+        mintButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mint SBT</title>
+  <!-- Include Bootstrap for styling (optional) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>congrats! you are verified...</h1>
+    <h2>you can now mint a Soul Bound Token in the next step.</h2>
+    <div class="form-group">
+      <label for="mintedAddress">Current Address:</label>
+      <input type="text" class="form-control" id="mintedAddress" readonly>
+    </div>
+    <div class="form-group">
+      <label for="mintedFile">Chosen File:</label>
+      <input type="text" class="form-control" id="mintedFile" readonly>
+    </div>
+    <!-- Button to redirect to nft.html -->
+    <button class="btn btn-primary" onclick="redirectToNFTPage()">Attest Verification</button>
+  </div>
+
+  <script>
+    // Extract address and filename from query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const address = urlParams.get('address');
+    const filename = decodeURIComponent(urlParams.get('filename'));
+    // Display address and filename in the input fields
+    document.getElementById('mintedAddress').value = address;
+    document.getElementById('mintedFile').value = filename;
+
+    // Function to redirect to nft.html
+    function redirectToNFTPage() {
+      window.location.href = 'nft.html';
+    }
+  </script>
+</body>
+</html>
